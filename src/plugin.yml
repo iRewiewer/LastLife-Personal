@@ -1,0 +1,27 @@
+main: net.irewiewer.lastlife.Main
+name: LastLife
+version: 0.3
+description: Custom LastLife plugin for personal use.
+author: iRewiewer
+api-version: 1.17
+commands:
+    boogey:
+        usage: /boogey
+        description: Choose a random boogeyman! (There may be secretly 2 boogeymen)
+        aliases: [b, boogeyman, boogeymen]
+    givelife:
+        usage: /givelife <name>
+        description: Give one of your lives to someone
+        aliases: [gl, lifegive]
+    startlives:
+        usage: /startlives
+        description: Initializes everybody's lives
+        aliases: [sl]
+    test:
+        usage: /test
+        description: For testing purposes only
+        aliases: [t]
+    resetconfig:
+        usage: /resetconfig
+        description: Reset config file to default
+        aliases: [rc]
