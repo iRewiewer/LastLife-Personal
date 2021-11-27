@@ -17,19 +17,13 @@ public class ResetConfig implements CommandExecutor
 	@EventHandler
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
+		// Command for resetting the config from in game
+		// using the already existing function in Main
 		plugin.resetConfig();
 		
-		if(sender instanceof Player)
-		{
-			sender.sendMessage(ChatColor.GRAY + "You've successfully reset the config.");
-		}
-		else if (sender instanceof ConsoleCommandSender)
-		{
-			System.out.println("You've successfully reset the config.");
-		}
-			
+		if(sender instanceof Player) { sender.sendMessage(ChatColor.GRAY + "You've successfully reset the config."); }
+		else if (sender instanceof ConsoleCommandSender) { System.out.println("You've successfully reset the config."); }	
 		
 		return true;
 	}
-	
 }

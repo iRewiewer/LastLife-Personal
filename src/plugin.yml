@@ -1,6 +1,6 @@
 main: net.irewiewer.lastlife.Main
 name: LastLife
-version: 0.3
+version: 1.1
 description: Custom LastLife plugin for personal use.
 author: iRewiewer
 api-version: 1.17
@@ -17,11 +17,13 @@ commands:
         usage: /startlives
         description: Initializes everybody's lives
         aliases: [sl]
-    test:
-        usage: /test
-        description: For testing purposes only
-        aliases: [t]
     resetconfig:
         usage: /resetconfig
         description: Reset config file to default
         aliases: [rc]
+    setlives:
+        usage: /setlives <Player> <amount>
+        description: Set lives of player to amount
+    token:
+        usage: /token <token>
+        description: Set the token of the discord webhook

@@ -1,10 +1,7 @@
 package net.irewiewer.lastlife;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,10 +19,16 @@ public class StartLives implements CommandExecutor
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		if(plugin.funcISL() == false)
+		// If the command hasn't been executed before
+		if(plugin.getISL() == false)
 		{
 			Participants players = new Participants();
 			
+			// For all the players online
+			// Create a 'Participant' object for each one of them
+			// with the respective attributes
+			// and add that participant to the 'Participants' list
+
 			for(Player player : Bukkit.getOnlinePlayers())
 			{
 				Participant part = new Participant();
@@ -37,19 +40,13 @@ public class StartLives implements CommandExecutor
 				players.addPart(part);
 			}
 
-			// Initialise file with n lives / player
-			try(FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "\\LastLife\\lives.json"))
-			{
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-				fileWriter.write(gson.toJson(players));
-				fileWriter.close();
-			}
-			catch (Exception error)	{ System.out.println(error); }
-
-
-			plugin.updateConfig(plugin.funcETC(), true);
+			// Write changes to file
+			try { Main.writeFile(players); } catch (IOException error) { error.printStackTrace(); }
 			
+			// Update config with changes
+			plugin.updateConfig(plugin.getETC(), true, plugin.getTI());
+			
+			// Inform either the player or the console that the command has been issued successfully
 			if(sender instanceof Player)
 			{
 				Player player = (Player)sender;
@@ -62,6 +59,7 @@ public class StartLives implements CommandExecutor
 		}
 		else
 		{
+			// Inform either the player or the console that the command has been issued already
 			if(sender instanceof Player)
 			{
 				Player player = (Player)sender;
@@ -73,7 +71,15 @@ public class StartLives implements CommandExecutor
 			}
 		}
 		
+		// Refresh the 'lives' variable with the updated content of the file
+		// as it is used throughout the plugin's instance
 		try { plugin.lives = Main.readFile(); } catch (FileNotFoundException error) { error.printStackTrace(); }
+		
+		// Update the config
+		plugin.updateConfig(plugin.getETC(), plugin.getISL(), true);
+		
+		// Update the colors of every online player
+		plugin.updateColoredNames();
 		
 		return true;
 	}

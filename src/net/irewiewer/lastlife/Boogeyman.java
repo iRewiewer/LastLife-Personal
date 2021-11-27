@@ -1,5 +1,9 @@
 package net.irewiewer.lastlife;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,29 +19,37 @@ public class Boogeyman implements CommandExecutor
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		Participants p = plugin.lives;
-		Participant b = null;
-		int boogyeNo = 0;
+		List<Participant> updatedParticipants = new ArrayList<>();
+		int boogiesNumber = (int)(Math.random() * 2) + 1;
 
-		for(Participant participant : p.getParts())
+		for(Participant participant : plugin.lives.getParts())
 		{
 			for(Player player : Bukkit.getOnlinePlayers())
-			{	
-				if((int)(Math.random() * 2) == 1 && participant.getBoogie() == false && boogyeNo <= 2)
+			{
+				if(player.getDisplayName().equals(participant.getName()))
 				{
-					if(player.getDisplayName().equals(participant.getName()))
+					if(participant.getBoogie() == false && boogiesNumber > 0 && participant.getLives() > 1)
 					{
 						player.sendMessage(ChatColor.RED + "You're the boogeyman!");
 						participant.setBoogie(true);
-						boogyeNo += 1;
+						boogiesNumber -= 1;
+					}
+					else
+					{
+						player.sendMessage(ChatColor.GREEN + "You're not the boogeyman!");
 					}
 				}
-				else player.sendMessage(ChatColor.GREEN + "You're not the boogeyman!");
 			}
+
+			updatedParticipants.add(participant);
 		}
 		
-		plugin.boogie = b;
+		plugin.lives.setParts(updatedParticipants);
 		
+		try { Main.writeFile(plugin.lives); } catch (IOException error) { error.printStackTrace(); }
+        
+		plugin.updateColoredNames();
+
 		return true;
 	}
 }
